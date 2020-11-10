@@ -592,7 +592,7 @@ public class Main {
         //只传递出压缩程序输出路径，程序将自动寻找partition文件
         long startTime = System.currentTimeMillis();
         tar.BSC(input_filePath,"/home/gene");
-        decompress(input_ref,input_namePath,input_filePath,output_Path);
+        decompress(input_ref,input_namePath,"/home/gene/out",output_Path);
         System.out.println("Decompression completes. The decompression takes " + (System.currentTimeMillis() - startTime) / 1000 + "s.");
     }
 }

@@ -15,7 +15,7 @@ public class tar {
 
     public static void BSC(String input,String output) throws Exception {
         String tmp = "/home/gene";
-        callShell("libbsc-master/bsc e "+input+"/out.bsc "+tmp+"/out.tar");
+        callShell("libbsc-master/bsc e "+input+" "+tmp+"/out.tar");
         TarArchiveInputStream tais = new TarArchiveInputStream(new FileInputStream(input));
         dearchive(new File(output),tais);
     }
