@@ -4,6 +4,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
 import java.io.*;
+import java.util.Objects;
 
 public class tar {
 
@@ -15,10 +16,28 @@ public class tar {
 
     public static void BSC(String input,String output) throws Exception {
         String tmp = "/home/gene";
-        callShell("libbsc-master/bsc e "+input+" "+tmp+"/out.tar");
-        TarArchiveInputStream tais = new TarArchiveInputStream(new FileInputStream(input));
+        callShell("./bsc d "+input+" "+tmp+"/out.tar");
+        TarArchiveInputStream tais = new TarArchiveInputStream(new FileInputStream(tmp+"/out.tar"));
         dearchive(new File(output),tais);
+        System.out.println(deleteFile(new File(tmp+"/out.tar")));
     }
+
+    //删除文件夹
+    public static boolean deleteFile(File dirFile) {
+        // 如果dir对应的文件不存在，则退出
+        if (!dirFile.exists()) {
+            return false;
+        }
+        if (dirFile.isFile()) {
+            return dirFile.delete();
+        } else {
+            for (File file : Objects.requireNonNull(dirFile.listFiles())) {
+                deleteFile(file);
+            }
+        }
+        return dirFile.delete();
+    }
+
 
     /**
      * 文件 解归档
@@ -34,25 +53,18 @@ public class tar {
 
         TarArchiveEntry entry = null;
         while ((entry = tais.getNextTarEntry()) != null) {
-
             // 文件
             String dir = destFile.getPath() + File.separator + entry.getName();
-
             File dirFile = new File(dir);
-
             // 文件检查
             fileProber(dirFile);
-
             if (entry.isDirectory()) {
                 dirFile.mkdirs();
             } else {
                 dearchiveFile(dirFile, tais);
             }
-
         }
     }
-
-
 
 
     /**
