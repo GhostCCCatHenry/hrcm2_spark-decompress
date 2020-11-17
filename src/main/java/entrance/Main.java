@@ -17,10 +17,10 @@ import static java.lang.Math.ceil;
 
 public class Main {
 
-    private static final int MAX_SEQ_NUM = 2000;//maximum sequence number
+//    private static final int MAX_SEQ_NUM = 2000;//maximum sequence number
     private static final int MAX_CHA_NUM = 1 << 28;//maximum length of a chromosome
-    private static final int LINE_CHA_NUM =200;
-    private static final int PERCENT = 15; //the percentage of compressed sequence number uses as reference
+//    private static final int LINE_CHA_NUM =200;
+//    private static final int PERCENT = 15; //the percentage of compressed sequence number uses as reference
     private static final int kMerLen = 13; //the length of k-mer
     private static final int kmer_bit_num = 2 * kMerLen; //bit numbers of k-mer
     private static final int hashTableLen = 1 << kmer_bit_num; // length of hash table
@@ -33,7 +33,7 @@ public class Main {
     private static int sec_seq_num; //the referenced sequence number used for second compress
     private static final char []ref_code=new char[MAX_CHA_NUM];
     private static final char []seq_code=new char[MAX_CHA_NUM];//mismatched subsequence
-    private static final int []low_loc= new int[VEC_SIZE/2]; //lowercase tuple location
+    private static int []low_loc= new int[VEC_SIZE/2]; //lowercase tuple location
 
     private static int[] ref_low_begin;
     private static int[] ref_low_length;
@@ -309,57 +309,41 @@ public class Main {
 
     private static void readOtherData(BufferedReader br) {
         //read lowercase character information
-       /*
         int flag;
-       */
 
         try {
-         /*           flag = Integer.parseInt(br.readLine());
-            System.out.println("lowercase flag: "+flag);
-            if (flag!=1){
+                flag = Integer.parseInt(br.readLine());
+//                System.out.println("lowercase flag: "+flag);
+                if (flag!=1){
+                    seq_low_len = Integer.parseInt(br.readLine());
+                    readPositionRangeData(br, seq_low_len , seq_low_begin, seq_low_length);
+                } else {
+                    low_loc = runLengthDecoding(br,1);//low_loc在decoding中会开辟内存，不需要在initial中开辟内存
+                    if(low_loc!=null)
+                        seq_low_len = low_loc.length;
+                    else
+                        seq_low_len = 0;
+                    diff_low_len = Integer.parseInt(br.readLine());
+//                    System.out.println("diff_low_len: "+diff_low_len);
+                    readPositionRangeData(br, diff_low_len, diff_low_begin,diff_low_length);
+                    seqLowercaseReading(seq_low_len);
+                }
 
-        */
-                seq_low_len = Integer.parseInt(br.readLine());
-               // System.out.println("seq_low_len: "+seq_low_len);
-                readPositionRangeData(br, seq_low_len , seq_low_begin, seq_low_length);
-         /*   } else {
-                low_loc = runLengthDecoding(br,1);//low_loc在decoding中会开辟内存，不需要在initial中开辟内存
-                if(low_loc!=null)
-                    seq_low_len = low_loc.length;
-                else
-                    seq_low_len = 0;
-                diff_low_len = Integer.parseInt(br.readLine());
-                System.out.println("diff_low_len: "+diff_low_len);
-                readPositionRangeData(br, diff_low_len, diff_low_begin,diff_low_length);
-                seqLowercaseReading(seq_low_len);
-            }
-
-          */
             //read n character information
             nCha_len = Integer.parseInt(br.readLine());
-          //  System.out.println("nCha_len: "+nCha_len);
             readPositionRangeData(br, nCha_len, Main.nCha_begin, Main.nCha_length);
-
             //read special character information
             spe_cha_len = Integer.parseInt(br.readLine());
-         //   System.out.println("spe_cha_len: "+spe_cha_len);
-//            fscanf(fp, "%d", &_spe_cha_len);
+
             if (spe_cha_len > 0)
                 readPositionRangeData(br, spe_cha_len, Main.spe_cha_pos, Main.spe_cha_ch);
-//                readSpeChaData(fp, _spe_cha_len, spe_cha);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        fscanf(fp, "%d", &flag);
+
     }
 
-/*    private static int spaceNumber(char []str) {
-        int num = 0;
-        for (int i = 0;i<str.length ; i++)
-            if (str[i] == ' ')
-                num++;
-        return num;
-    }*/
     private static void readFirstMatchResult(BufferedReader br, List <MatchEntry> _mr) {
         String str;
         String []temp_str ;

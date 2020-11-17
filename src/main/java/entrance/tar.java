@@ -8,11 +8,11 @@ import java.util.Objects;
 
 public class tar {
 
-    private static final String BASE_DIR = "";
+//    private static final String BASE_DIR = "";
 
     private static final int BUFFER = 1024*4;
 
-    private static final String EXT = ".tar";
+//    private static final String EXT = ".tar";
 
     public static void BSC(String input,String output) throws Exception {
         String tmp = "/home/gene";
