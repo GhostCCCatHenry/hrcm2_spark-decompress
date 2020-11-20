@@ -461,7 +461,7 @@ public class Main {
         String input_ref = args[0];//参考序列路径
         String input_filePath = args[1];//已压缩文件路径(.bsc)
 //        String input_namePath = args[2];//源文件路径（hdfs获取文件名）
-        String output_Path = args[3];//输出路径
+        String output_Path = args[2];//输出路径
 //        String namePath = "D:\\geneEXP\\HRCMspark\\filePath.txt";
 //        String filePath = "D:\\geneEXP\\HRCMspark\\output\\";
 //        file = args[0];
