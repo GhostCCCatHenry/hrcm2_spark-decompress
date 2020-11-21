@@ -15,11 +15,14 @@ public class tar {
 //    private static final String EXT = ".tar";
 
     public static void BSC(String input,String output) throws Exception {
-        String tmp = "/home/gene";
+        String tmp = "/temp/gene";
+        File tp = new File(tmp);
+        if(!tp.exists()) tp.mkdirs();
         callShell("./bsc d "+input+" "+tmp+"/out.tar");
         TarArchiveInputStream tais = new TarArchiveInputStream(new FileInputStream(tmp+"/out.tar"));
         dearchive(new File(output),tais);
-        System.out.println(deleteFile(new File(tmp+"/out.tar")));
+        deleteFile(new File(tmp+"/out.tar"));
+        deleteFile(tp);
     }
 
     //删除文件夹
