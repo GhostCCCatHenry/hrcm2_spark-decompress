@@ -21,8 +21,8 @@ public class tar {
         callShell("./bsc d "+input+" "+tmp+"/out.tar");
         TarArchiveInputStream tais = new TarArchiveInputStream(new FileInputStream(tmp+"/out.tar"));
         dearchive(new File(output),tais);
-        deleteFile(new File(tmp+"/out.tar"));
-        deleteFile(tp);
+//        deleteFile(new File(tmp+"/out.tar"));
+//        deleteFile(tp);
     }
 
     //删除文件夹
