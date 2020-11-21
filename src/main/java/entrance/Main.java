@@ -94,7 +94,7 @@ public class Main {
         seqNumber = seqName.size();
     }
 
-    private static void referenceSequenceExtraction(String str_referenceName) {
+    private static void referenceSequenceExtraction(String str_referenceName) throws IOException{
         int _seq_code_len = 0, _ref_low_len = 1, letters_len = 0;//record lowercase from 1, diff_lowercase_loc[i]=0 means mismatching
         char temp_cha;
         boolean flag = true;
@@ -103,47 +103,41 @@ public class Main {
         File fp=new File(str_referenceName);
         BufferedReader br;
 
-        try {
-            br=new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fp))));
-            br.readLine();
-            while (null!=(str = br.readLine()))
-            {
-                cha=str.toCharArray();
-                for (int i=0;i<cha.length;i++){
-                    temp_cha=cha[i];
-                    if(Character.isLowerCase(temp_cha)){
-                        if (flag) //previous is upper case
-                        {
-                            flag = false; //change status of flag
-                            ref_low_begin[_ref_low_len] = letters_len;
-                            letters_len = 0;
-                        }
-                        temp_cha = Character.toUpperCase(temp_cha);
+        br=new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fp))));
+        br.readLine();
+        while (null!=(str = br.readLine())){
+            cha=str.toCharArray();
+            for (int i=0;i<cha.length;i++){
+                temp_cha=cha[i];
+                if(Character.isLowerCase(temp_cha)){
+                    if (flag) //previous is upper case
+                    {
+                        flag = false; //change status of flag
+                        ref_low_begin[_ref_low_len] = letters_len;
+                        letters_len = 0;
                     }
-                    else {
-                        if (!flag)  //previous is lower case
-                        {
-                            flag = true;
-                            ref_low_length[_ref_low_len++] = letters_len;
-                            letters_len = 0;
-                        }
-                    }
-                    if (temp_cha == 'A' || temp_cha == 'C' || temp_cha == 'G' || temp_cha == 'T')
-                        ref_code[_seq_code_len++] = temp_cha;
-                    letters_len++;
+                    temp_cha = Character.toUpperCase(temp_cha);
                 }
+                else {
+                    if (!flag)  //previous is lower case
+                    {
+                        flag = true;
+                        ref_low_length[_ref_low_len++] = letters_len;
+                        letters_len = 0;
+                    }
+                }
+                if (temp_cha == 'A' || temp_cha == 'C' || temp_cha == 'G' || temp_cha == 'T')
+                    ref_code[_seq_code_len++] = temp_cha;
+                letters_len++;
             }
-            br.close();
-        }  catch (IOException e) {
-            e.printStackTrace();
         }
-        if (!flag)  //if flag=false, don't forget record the length
+        br.close();
+
+        if (!flag)
             ref_low_length[_ref_low_len++] = letters_len;
 
         ref_code_len = _seq_code_len;
         ref_low_len = _ref_low_len - 1;
-//        System.out.println("Extraction of reference sequence complete. Reference code length: %d. Lowercase length: %d.\n"+ ref_code_len+"\t"+ref_low_len);
-
     }
 
     private static void seqLowercaseReading(int _seq_low_len) {
@@ -413,7 +407,6 @@ public class Main {
 
     private static void decompress(String refPath, String namePath,String filePath ,String outPath) {
         BufferedReader br1;
-        BufferedReader br2;
         BufferedWriter bw;
 
         readName(namePath);
@@ -422,12 +415,10 @@ public class Main {
         sec_seq_num = 45/*(int) ceil(PERCENT * seqNumber / 100)*/;
         initial();
 
-        referenceSequenceExtraction(refPath);
         try {
-            //先读行宽与id
-//            br1 = new BufferedReader(new FileReader(new File(otherPath+seqName.get(seqNumber-1))));
-//            readIdentifierData(br1, identifier_vec);//save identifier data, identifier_vec也是一个数组，它在initial中初始化，长度是seqNumber-1
-//            lineWidth_vec = runLengthDecoding(br1,0);//read lineWidth data，decoding函数中会给lineWidth开辟内存，所以解压缩初始化时不需要给lineWidth开辟内存
+
+            referenceSequenceExtraction(refPath);
+
             for (int i = 0; i < seqNumber; i++) {
                 //读取其他信息
 //                br1 = new BufferedReader(new FileReader(new File(otherPath+"\\"+seqName.get(i))));
