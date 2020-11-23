@@ -458,8 +458,8 @@ public class Main {
 //        String tmp = "J:\\gene";
         //只传递出压缩程序输出路径，程序将自动寻找partition文件
         long startTime = System.currentTimeMillis();
-//        tar.BSC(input_filePath,tmp);
-        decompress(input_ref,tmp+"\\out\\hdfs_name.txt",tmp+"\\out",output_Path);
+        tar.BSC(input_filePath,tmp);
+        decompress(input_ref,tmp+"/out/hdfs_name.txt",tmp+"/out",output_Path);
         tar.deleteFile(new File(tmp));
         System.out.println("Decompression completes. The decompression takes " + (System.currentTimeMillis() - startTime) / 1000 + "s.");
 
